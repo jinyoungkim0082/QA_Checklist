@@ -108,9 +108,26 @@ body {
   border-bottom: 2px solid var(--border);
 }
 
-.brand { display: flex; align-items: center; gap: 14px; }
+.brand {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none; cursor: pointer;
+  border-radius: var(--r2); padding: 4px;
+  transition: opacity .15s;
+}
+.brand:hover { opacity: .8; }
 
-.logo {
+.brand-sub-row {
+  display: flex; align-items: center; gap: 8px; margin-top: 2px;
+}
+.brand-sub-row p { font-size: .72rem; color: var(--text3); margin: 0; }
+
+.ver-tag {
+  font-family: var(--mono); font-size: .58rem; letter-spacing: 1px;
+  color: var(--blue); background: var(--blue-lt);
+  border: 1px solid rgba(37,99,235,.2);
+  border-radius: 99px; padding: 2px 8px; white-space: nowrap;
+  font-weight: 600; flex-shrink: 0;
+}
   width: 44px; height: 44px;
   background: var(--blue);
   border-radius: var(--r2);
@@ -125,15 +142,18 @@ body {
   font-size: 1.2rem; font-weight: 700;
   color: var(--text); letter-spacing: -.3px; line-height: 1.2;
 }
-.brand-copy p { font-size: .72rem; color: var(--text3); margin-top: 2px; }
 
-.ver-tag {
-  font-family: var(--mono); font-size: .6rem; letter-spacing: 1.5px;
-  color: var(--blue); background: var(--blue-lt);
-  border: 1px solid rgba(37,99,235,.2);
-  border-radius: 99px; padding: 4px 12px; white-space: nowrap;
-  font-weight: 500;
+.lang-switcher {
+  display: flex; gap: 4px; align-items: center; margin-left: 8px;
 }
+.lang-btn {
+  font-family: var(--mono); font-size: .65rem; font-weight: 600;
+  padding: 4px 10px; border-radius: 99px; border: 1px solid var(--border2);
+  background: var(--surface); color: var(--text3); cursor: pointer;
+  transition: all .15s; white-space: nowrap;
+}
+.lang-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+.lang-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
 
 /* ════════════════════════════════════════
    CONFIG CARD
@@ -417,6 +437,16 @@ body {
 }
 .section-header:hover { background: var(--surface2); }
 
+.btn-section-del {
+  flex-shrink: 0; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 1px solid transparent; border-radius: var(--r);
+  color: var(--border2); font-size: .72rem; cursor: pointer;
+  transition: all .15s; margin-left: 2px;
+}
+.btn-section-del:hover { color: var(--red); border-color: var(--red-ring); background: var(--red-lt); }
+
+
 .section-icon {
   width: 32px; height: 32px; flex-shrink: 0;
   background: var(--surface3); border: 1px solid var(--border);
@@ -682,6 +712,46 @@ body {
 }
 .btn-mconfirm:hover { background: #1d4ed8; }
 
+/* ── Icon Picker ── */
+.icon-picker-wrap { position: relative; }
+.icon-picker-trigger {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; width: 100%;
+  background: var(--surface); border: 1.5px solid var(--border2);
+  border-radius: var(--r); cursor: pointer; transition: border-color .15s;
+  font-size: .9rem;
+}
+.icon-picker-trigger:hover { border-color: var(--blue); }
+.icon-picker-trigger:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-ring); }
+#iconPickerSelected { font-size: 1.3rem; line-height: 1; }
+.icon-picker-caret { margin-left: auto; font-size: .65rem; color: var(--text4); transition: transform .15s; }
+.icon-picker-wrap.open .icon-picker-caret { transform: rotate(180deg); }
+.icon-picker-dropdown {
+  display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--surface); border: 1.5px solid var(--border2);
+  border-radius: var(--r2); box-shadow: var(--shadow-lg);
+  z-index: 10000; max-height: 220px; overflow-y: auto;
+  padding: 8px;
+}
+.icon-picker-wrap.open .icon-picker-dropdown { display: block; }
+.icon-group-label {
+  font-size: .63rem; font-weight: 700; letter-spacing: 1px;
+  color: var(--text4); text-transform: uppercase;
+  padding: 6px 4px 3px; margin-top: 4px;
+}
+.icon-group-label:first-child { margin-top: 0; }
+.icon-grid {
+  display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px;
+}
+.icon-opt {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; aspect-ratio: 1; font-size: 1.15rem;
+  background: none; border: 1.5px solid transparent;
+  border-radius: var(--r); cursor: pointer; transition: all .1s;
+}
+.icon-opt:hover { background: var(--blue-lt); border-color: var(--blue-ring); transform: scale(1.15); }
+.icon-opt.selected { background: var(--blue-lt); border-color: var(--blue); }
+
 /* ════════════════════════════════════════
    FOOTER
 ════════════════════════════════════════ */
@@ -710,7 +780,7 @@ body {
 
   <!-- ─── HEADER ─── -->
   <header class="site-header">
-    <div class="brand">
+    <a class="brand" href="javascript:location.reload()" title="처음으로">
       <div class="logo">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <rect x="5" y="2" width="14" height="20" rx="2"/>
@@ -721,10 +791,17 @@ body {
       </div>
       <div class="brand-copy">
         <h1>Mobile QA Checklist</h1>
-        <p>모바일 앱 품질 보증 체크리스트 생성기</p>
+        <div class="brand-sub-row">
+          <p>모바일 앱 품질 보증 체크리스트 생성기</p>
+          <span class="ver-tag">v4.0.0</span>
+        </div>
       </div>
+    </a>
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="ko" onclick="switchLang('ko')">한국어</button>
+      <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ja" onclick="switchLang('ja')">日本語</button>
     </div>
-    <span class="ver-tag">v4.0.0</span>
   </header>
 
   <!-- ─── CONFIG CARD ─── -->
@@ -747,7 +824,7 @@ body {
         <div class="field">
           <label>플랫폼 / Platform</label>
           <select id="platform">
-            <option value="ios + AOS">iOS + Android</option>
+            <option value="both">iOS + Android</option>
             <option value="ios">iOS Only</option>
             <option value="android">Android Only</option>
           </select>
@@ -820,7 +897,6 @@ body {
         <button class="tool-btn t-save" id="btnSaveOutput">💾 저장</button>
         <button class="tool-btn" id="btnReset">초기화</button>
         <button class="tool-btn t-print" id="btnPrint">🖨 인쇄 / PDF</button>
-        <button class="tool-btn t-danger" id="btnClose">✕ 닫기</button>
       </div>
     </div>
 
@@ -882,7 +958,16 @@ body {
     <div class="modal-title">+ 커스텀 카테고리 추가</div>
     <div class="field">
       <label>아이콘 (이모지)</label>
-      <input type="text" id="newCatIcon" placeholder="예: 🧪  📋  🔍" maxlength="4" />
+      <div class="icon-picker-wrap">
+        <button type="button" class="icon-picker-trigger" id="iconPickerTrigger">
+          <span id="iconPickerSelected">📋</span>
+          <span class="icon-picker-caret">▾</span>
+        </button>
+        <div class="icon-picker-dropdown" id="iconPickerDropdown">
+          <div class="icon-picker-groups" id="iconPickerGroups"></div>
+        </div>
+      </div>
+      <input type="hidden" id="newCatIcon" value="📋" />
     </div>
     <div class="field">
       <label>카테고리 이름 *</label>
@@ -1007,31 +1092,36 @@ var CHECKLIST_DATA = {
 
 var TYPE_EXTRAS = {
   ecommerce:[
-    {section:'functional', text:'★ 장바구니 추가/삭제/수량 변경 정상 작동', priority:'high'},
-    {section:'functional', text:'★ 결제 플로우 전 과정 (카드/간편결제/포인트) 검증', priority:'high'},
-    {section:'functional', text:'★ 쿠폰/할인코드 적용 및 최종 금액 계산 정확성', priority:'high'},
-    {section:'security',   text:'★ 결제 정보 암호화 전송 및 저장 금지 확인', priority:'high'}
+    {section:'functional', text:'★ 장바구니 추가/삭제/수량 변경 정상 작동', priority:'high', _key:'ec1'},
+    {section:'functional', text:'★ 결제 플로우 전 과정 (카드/간편결제/포인트) 검증', priority:'high', _key:'ec2'},
+    {section:'functional', text:'★ 쿠폰/할인코드 적용 및 최종 금액 계산 정확성', priority:'high', _key:'ec3'},
+    {section:'security',   text:'★ 결제 정보 암호화 전송 및 저장 금지 확인', priority:'high', _key:'ec4'}
   ],
   fintech:[
-    {section:'security',   text:'★ 생체인증(Face ID/지문) 대체 수단 제공 확인', priority:'high'},
-    {section:'functional', text:'★ 잔액/거래내역 실시간 정확성 확인', priority:'high'},
-    {section:'security',   text:'★ 화면 캡처 차단 — 계좌번호/잔액 노출 방지', priority:'high'}
+    {section:'security',   text:'★ 생체인증(Face ID/지문) 대체 수단 제공 확인', priority:'high', _key:'ft1'},
+    {section:'functional', text:'★ 잔액/거래내역 실시간 정확성 확인', priority:'high', _key:'ft2'},
+    {section:'security',   text:'★ 화면 캡처 차단 — 계좌번호/잔액 노출 방지', priority:'high', _key:'ft3'}
   ],
   social:[
-    {section:'functional', text:'★ 콘텐츠 업로드 (사진/동영상/텍스트) 각 플로우 검증', priority:'high'},
-    {section:'functional', text:'★ 댓글/좋아요/공유 실시간 반영 확인', priority:'medium'},
-    {section:'security',   text:'★ 비공개 계정 콘텐츠 타인에게 노출 안 되는지 확인', priority:'high'}
+    {section:'functional', text:'★ 콘텐츠 업로드 (사진/동영상/텍스트) 각 플로우 검증', priority:'high', _key:'sn1'},
+    {section:'functional', text:'★ 댓글/좋아요/공유 실시간 반영 확인', priority:'medium', _key:'sn2'},
+    {section:'security',   text:'★ 비공개 계정 콘텐츠 타인에게 노출 안 되는지 확인', priority:'high', _key:'sn3'}
   ],
   health:[
-    {section:'functional',  text:'★ 건강 데이터 HealthKit/Google Fit 연동 확인', priority:'high'},
-    {section:'functional',  text:'★ 운동 기록 중 백그라운드 트래킹 정상 동작', priority:'high'},
-    {section:'performance', text:'★ GPS 지속 사용 중 배터리 드레인 측정', priority:'medium'}
+    {section:'functional',  text:'★ 건강 데이터 HealthKit/Google Fit 연동 확인', priority:'high', _key:'hl1'},
+    {section:'functional',  text:'★ 운동 기록 중 백그라운드 트래킹 정상 동작', priority:'high', _key:'hl2'},
+    {section:'performance', text:'★ GPS 지속 사용 중 배터리 드레인 측정', priority:'medium', _key:'hl3'}
   ],
   media:[
-    {section:'functional',  text:'★ 스트리밍 버퍼링 없이 720p/1080p 재생 확인', priority:'high'},
-    {section:'functional',  text:'★ 다운로드 후 오프라인 재생 정상 동작', priority:'high'},
-    {section:'performance', text:'★ 백그라운드 오디오 재생 중 다른 앱 사용 가능 확인', priority:'medium'}
+    {section:'functional',  text:'★ 스트리밍 버퍼링 없이 720p/1080p 재생 확인', priority:'high', _key:'md1'},
+    {section:'functional',  text:'★ 다운로드 후 오프라인 재생 정상 동작', priority:'high', _key:'md2'},
+    {section:'performance', text:'★ 백그라운드 오디오 재생 중 다른 앱 사용 가능 확인', priority:'medium', _key:'md3'}
   ]
+};
+
+var TYPE_EXTRAS_I18N = {
+  en: { ec1:'★ Cart add/delete/qty change works correctly', ec2:'★ Full payment flow (card/easy pay/points) verified', ec3:'★ Coupon/discount code applied and final amount correct', ec4:'★ Payment data encrypted in transit, not stored in plain text', ft1:'★ Biometric (Face ID/fingerprint) fallback provided', ft2:'★ Balance/transaction history real-time accuracy', ft3:'★ Screenshot blocked — account number/balance exposure prevention', sn1:'★ Content upload (photo/video/text) each flow verified', sn2:'★ Comment/like/share reflected in real time', sn3:'★ Private account content not visible to others', hl1:'★ Health data HealthKit/Google Fit integration verified', hl2:'★ Background tracking during workout works correctly', hl3:'★ Battery drain measured during continuous GPS use', md1:'★ Streaming plays 720p/1080p without buffering', md2:'★ Downloaded content plays offline correctly', md3:'★ Background audio plays while using other apps' },
+  ja: { ec1:'★ カート追加/削除/数量変更が正常に動作する', ec2:'★ 決済フロー全体（カード/簡単決済/ポイント）の検証', ec3:'★ クーポン/割引コード適用と最終金額の正確性確認', ec4:'★ 決済情報の暗号化送信・平文保存禁止確認', ft1:'★ 生体認証（Face ID/指紋）の代替手段提供確認', ft2:'★ 残高/取引履歴のリアルタイム正確性確認', ft3:'★ 画面キャプチャブロック — 口座番号/残高露出防止', sn1:'★ コンテンツアップロード（写真/動画/テキスト）各フロー検証', sn2:'★ コメント/いいね/シェアのリアルタイム反映確認', sn3:'★ 非公開アカウントのコンテンツが他者に見えないか確認', hl1:'★ 健康データ HealthKit/Google Fit 連携確認', hl2:'★ ワークアウト中のバックグラウンドトラッキング動作確認', hl3:'★ GPS継続使用中のバッテリードレイン測定', md1:'★ ストリーミング720p/1080pがバッファリングなしで再生', md2:'★ ダウンロード後のオフライン再生が正常動作', md3:'★ バックグラウンド音声再生中に他アプリ使用可能か確認' }
 };
 
 /* ═══════════════════════════════════════
@@ -1039,6 +1129,293 @@ var TYPE_EXTRAS = {
 ═══════════════════════════════════════ */
 var itemState    = {};   // "cat_idx" -> 'none'|'pass'|'fail'|'na'|'nt'
 var itemCounters = {};   // cat -> next index
+var deletedKeys  = [];   // ["cat_idx", ...] — tracks deleted items for restore
+/* ═══════════════════════════════════════
+   i18n — UI + Category + Item translations
+═══════════════════════════════════════ */
+var LANG = 'ko'; // default
+
+var I18N = {
+  ko: {
+    subtitle: '모바일 앱 품질 보증 체크리스트 생성기',
+    configTitle: '테스트 설정', configSub: '항목을 입력 후 체크리스트를 생성하세요',
+    labelAppName: '앱 이름', labelVersion: '버전', labelPlatform: '플랫폼',
+    labelAppType: '앱 유형', labelDept: '부서', labelTester: '테스트 진행자',
+    labelCat: '테스트 카테고리', labelNotes: '특이사항 / 추가 범위 (선택)',
+    phAppName: '예: 카카오뱅크, MyApp', phDept: '예: QA팀, 개발1팀', phTester: '예: 홍길동',
+    phNotes: '예: 결제 플로우 집중 테스트, 신규 기기 지원 확인...',
+    btnGenerate: '체크리스트 생성하기', btnSave: '💾 임시저장', btnLoad: '📂 불러오기',
+    btnSelectAll: '전체 선택', btnDeselectAll: '전체 해제', btnAddCat: '+ 카테고리 추가',
+    btnLocale: '🌐 다국어 추가', btnExpand: '전체 접기', btnCollapse: '전체 펼치기',
+    btnSaveOut: '💾 저장', btnReset: '초기화', btnPrint: '🖨 인쇄 / PDF',
+    statusNone: '— 미진행', statusPass: 'PASS', statusFail: 'FAIL', statusNa: 'N/A', statusNt: 'N/T',
+    priHigh: '높음', priMed: '중간', priLow: '낮음',
+    phRemark: '비고 입력...', phNewItem: '  + 항목 직접 추가... (Enter)',
+    btnAddItem: '항목 추가 +', btnDelSection: '섹션 삭제',
+    confirmReset: '모든 결과를 초기화하시겠습니까?',
+    confirmLoad: '저장된 체크리스트를 불러오시겠습니까?\n저장시각: {t}\n\n현재 작업 내용은 덮어씌워집니다.',
+    confirmDelSection: '이 섹션을 삭제하시겠습니까?\n삭제 후 카테고리 태그 선택도 해제됩니다.',
+    msgNoData: '저장할 체크리스트가 없습니다.', msgSaved: '✓ 임시저장 완료 — {t}',
+    msgAutoSaved: '⟳ 자동저장 — {t}', msgSaveErr: '저장 실패: {e}',
+    msgLoadOk: '✓ 불러오기 완료 (저장: {t})', msgNoSave: '저장된 데이터가 없습니다.',
+    msgLocaleAdded: '✓ 다국어 항목 추가 완료',
+    appTypeEC: 'E-Commerce / 쇼핑', appTypeFT: 'FinTech / 금융', appTypeSN: 'SNS / 소셜',
+    appTypeHL: '헬스 / 피트니스', appTypeMD: '미디어 / 스트리밍', appTypePR: '생산성 / 업무',
+    appTypeGM: '게임', appTypeGL: '일반 앱',
+    tagFunctional: '⚙️ 기능 테스트', tagUI: '🎨 UI/UX', tagPerf: '⚡ 성능',
+    tagNetwork: '🌐 네트워크', tagSecurity: '🔒 보안', tagA11y: '♿ 접근성',
+    tagCompat: '📱 호환성', tagRegress: '🔁 회귀 테스트', tagLocale: '🌍 현지화', tagPush: '🔔 푸시 알림',
+    catNames: {
+      functional:'기능 테스트 (Functional)', ui:'UI/UX 테스트', performance:'성능 테스트 (Performance)',
+      network:'네트워크 테스트', security:'보안 테스트 (Security)', accessibility:'접근성 테스트 (Accessibility)',
+      compatibility:'호환성 테스트 (Compatibility)', regression:'회귀 테스트 (Regression)',
+      localization:'현지화 테스트 (Localization)', push:'푸시 알림 테스트'
+    },
+    items: {
+      functional:['모든 핵심 사용자 플로우가 정상 작동하는지 확인','로그인 / 로그아웃 / 회원가입 플로우 검증','필수 입력 필드 유효성 검사 (이메일, 전화번호, 비밀번호)','데이터 저장 후 앱 재시작 시 데이터 유지 확인','백버튼 / 뒤로가기 동작 일관성 확인','탭 전환 및 화면 전환 시 상태 유지 여부 확인','검색 기능 — 키워드, 필터, 정렬 동작 검증','에러 메시지 적절성 및 사용자 친화성 확인','빈 상태(Empty State) UI 적절히 표시되는지 확인','알림 권한 허용/거부 후 앱 동작 정상 확인'],
+      ui:['스플래시 스크린 및 로딩 애니메이션 자연스럽게 표시','폰트 크기, 색상, 여백이 디자인 스펙과 일치하는지 확인','버튼 및 터치 영역 최소 44×44pt 이상인지 확인','키보드 표시 시 주요 콘텐츠가 가려지지 않는지 확인','스크롤 동작 부드러움 및 스크롤 위치 복원 확인','다크모드 / 라이트모드 전환 시 UI 깨짐 없음','다양한 텍스트 크기 설정(접근성)에서 레이아웃 확인','이미지 로딩 중 플레이스홀더 표시 확인','가로/세로 화면 회전 시 레이아웃 대응 확인','Notch/Dynamic Island/펀치홀 영역 침범 없음'],
+      performance:['콜드 스타트 시간 3초 이내 확인','메인 화면 진입 후 첫 콘텐츠 노출 시간 측정','스크롤 시 60fps 유지 여부 (FrameDrop 없음)','30분 사용 후 메모리 누수 여부 확인','배터리 사용량 이상 과다소모 없음 확인','앱 백그라운드 전환 후 복귀 시 상태 복원 확인','대용량 리스트(1000개+) 렌더링 성능 확인','이미지 캐싱 정상 작동 (재방문 시 즉시 표시)','ANR/Crash 없이 연속 1시간 사용 가능 확인'],
+      network:['오프라인 상태에서 적절한 에러 메시지 표시','네트워크 전환 시 (WiFi ↔ LTE) 자동 복구 확인','API 응답 타임아웃 처리 및 재시도 로직 확인','느린 네트워크(2G/3G 시뮬레이션)에서 로딩 인디케이터 표시','중복 요청 방지 (빠른 연속 탭 처리)','대용량 파일 업로드/다운로드 진행률 표시 확인','서버 500/400 오류 시 사용자 친화적 안내 확인','백그라운드에서 네트워크 요청 취소 처리 확인'],
+      security:['비밀번호 및 민감 데이터 로그에 노출되지 않는지 확인','SSL Pinning / TLS 1.2+ 적용 확인','로컬 저장소(UserDefaults/SharedPreferences) 민감 데이터 암호화','세션 만료 처리 및 자동 로그아웃 확인','스크린샷/화면 녹화 차단 필요 화면 확인 (금융앱)','루팅/탈옥 기기 탐지 및 접근 제한','딥링크 유효성 검증 — 파라미터 인젝션 방지','API 토큰 노출 여부 확인 (네트워크 캡처 테스트)','앱 백그라운드 진입 시 민감 화면 블러 처리 확인'],
+      accessibility:['VoiceOver(iOS) / TalkBack(Android) 모든 요소 읽힘 확인','이미지에 대체 텍스트(Alt Text) 적용 확인','색상 대비율 WCAG 4.5:1 이상 확인','터치 타겟 확대 시(볼드체/큰 텍스트) 레이아웃 유지','포커스 순서 논리적 흐름 확인','색맹 모드에서 정보 인식 가능한지 확인'],
+      compatibility:['iOS 최소 지원 버전에서 정상 동작 확인','Android 최소 SDK 버전 기기에서 정상 동작 확인','소형 화면(4.7인치)에서 레이아웃 확인','태블릿/iPad에서 레이아웃 최적화 확인','폴더블 폰 화면 전환 시 대응 확인','시스템 언어 변경 시 UI 레이아웃 깨짐 없음','최신 OS 업데이트 후 호환성 재확인','다양한 해상도(HDPI, XHDPI, XXHDPI) 이미지 선명도 확인'],
+      regression:['이전 버전에서 정상 작동하던 핵심 기능 재확인','이전 버전 사용자 데이터 마이그레이션 정상 처리','버그 수정 항목이 실제로 수정되었는지 확인','수정 항목 주변 사이드이펙트 없음 확인','기존 설정값 초기화 없이 유지되는지 확인','이전 버전 -> 신규 버전 업데이트 후 정상 작동 확인'],
+      localization:['지원 언어 텍스트 잘림(Truncation) 없음 확인','날짜/시간/통화 형식 지역별 올바르게 표시','RTL 언어(아랍어 등)에서 레이아웃 미러링 확인','번역 누락 키(Key) 없음 — 영어 텍스트 노출 확인','하드코딩된 문자열 없음 확인','앱스토어 스크린샷 / 텍스트 현지화 확인'],
+      push:['앱 포그라운드 / 백그라운드 / 종료 상태에서 푸시 수신 확인','푸시 탭 시 올바른 화면으로 딥링크 이동 확인','알림 권한 미허용 시 앱 동작 정상 확인','예약 알림 정확한 시간에 발송 확인','알림 내용에 개인정보 과다 노출 없음 확인','알림 설정 온/오프 즉시 반영 확인','뱃지 카운트 정확히 표시/초기화 확인']
+    }
+  },
+  en: {
+    subtitle: 'Mobile App Quality Assurance Checklist Generator',
+    configTitle: 'Test Configuration', configSub: 'Fill in the fields and generate your checklist',
+    labelAppName: 'App Name', labelVersion: 'Version', labelPlatform: 'Platform',
+    labelAppType: 'App Type', labelDept: 'Department', labelTester: 'Tester',
+    labelCat: 'Test Categories', labelNotes: 'Notes / Additional Scope (Optional)',
+    phAppName: 'e.g. MyApp, SuperShop', phDept: 'e.g. QA Team', phTester: 'e.g. Jane Doe',
+    phNotes: 'e.g. Focus on payment flow, new device support...',
+    btnGenerate: 'Generate Checklist', btnSave: '💾 Save Draft', btnLoad: '📂 Load',
+    btnSelectAll: 'Select All', btnDeselectAll: 'Deselect All', btnAddCat: '+ Add Category',
+    btnLocale: '🌐 Add Locale', btnExpand: 'Collapse All', btnCollapse: 'Expand All',
+    btnSaveOut: '💾 Save', btnReset: 'Reset', btnPrint: '🖨 Print / PDF',
+    statusNone: '— Pending', statusPass: 'PASS', statusFail: 'FAIL', statusNa: 'N/A', statusNt: 'N/T',
+    priHigh: 'High', priMed: 'Medium', priLow: 'Low',
+    phRemark: 'Add remark...', phNewItem: '  + Add item directly... (Enter)',
+    btnAddItem: 'Add Item +', btnDelSection: 'Delete Section',
+    confirmReset: 'Reset all results?',
+    confirmLoad: 'Load saved checklist?\nSaved at: {t}\n\nCurrent work will be overwritten.',
+    confirmDelSection: 'Delete this section?\nThe category tag will also be deselected.',
+    msgNoData: 'No checklist to save.', msgSaved: '✓ Saved — {t}',
+    msgAutoSaved: '⟳ Auto-saved — {t}', msgSaveErr: 'Save failed: {e}',
+    msgLoadOk: '✓ Loaded (saved: {t})', msgNoSave: 'No saved data found.',
+    msgLocaleAdded: '✓ Locale items added',
+    appTypeEC: 'E-Commerce / Shopping', appTypeFT: 'FinTech / Finance', appTypeSN: 'SNS / Social',
+    appTypeHL: 'Health / Fitness', appTypeMD: 'Media / Streaming', appTypePR: 'Productivity',
+    appTypeGM: 'Game', appTypeGL: 'General App',
+    tagFunctional: '⚙️ Functional', tagUI: '🎨 UI/UX', tagPerf: '⚡ Performance',
+    tagNetwork: '🌐 Network', tagSecurity: '🔒 Security', tagA11y: '♿ Accessibility',
+    tagCompat: '📱 Compatibility', tagRegress: '🔁 Regression', tagLocale: '🌍 Localization', tagPush: '🔔 Push Notification',
+    catNames: {
+      functional:'Functional Testing', ui:'UI/UX Testing', performance:'Performance Testing',
+      network:'Network Testing', security:'Security Testing', accessibility:'Accessibility Testing',
+      compatibility:'Compatibility Testing', regression:'Regression Testing',
+      localization:'Localization Testing', push:'Push Notification Testing'
+    },
+    items: {
+      functional:['Verify all core user flows work correctly','Login / Logout / Sign-up flow validation','Required field validation (email, phone, password)','Data persistence after app restart','Back button / navigation consistency','State retention during tab and screen transitions','Search — keyword, filter, sort validation','Error message appropriateness and user-friendliness','Empty state UI displayed correctly','Notification permission allow/deny app behavior'],
+      ui:['Splash screen and loading animation display smoothly','Font size, color, and spacing match design spec','Button and touch target minimum 44×44pt','Keyboard does not obscure key content','Scroll smoothness and scroll position restoration','No UI breakage in dark/light mode switch','Layout integrity under large accessibility text sizes','Placeholder shown during image loading','Layout adapts correctly on screen rotation','No intrusion into Notch/Dynamic Island/punch-hole area'],
+      performance:['Cold start time under 3 seconds','Time to first content after main screen entry','60fps maintained during scroll (no frame drops)','No memory leak after 30 minutes of use','No abnormal battery drain','State restored after app background/foreground switch','Rendering performance with large lists (1000+ items)','Image caching works (instant display on revisit)','No ANR/Crash during 1 hour continuous use'],
+      network:['Appropriate error message shown when offline','Auto-recovery on network switch (WiFi ↔ LTE)','API timeout handling and retry logic','Loading indicator shown on slow network (2G/3G sim)','Duplicate request prevention (rapid tapping)','Upload/download progress indicator','User-friendly error for 500/400 server responses','Background network request cancellation'],
+      security:['Password and sensitive data not exposed in logs','SSL Pinning / TLS 1.2+ enforced','Local storage (UserDefaults/SharedPreferences) encryption','Session expiry and auto-logout','Screenshot/recording blocked on sensitive screens','Rooted/jailbroken device detection','Deep link parameter injection prevention','API token not exposed in network captures','Sensitive screens blurred when app goes to background'],
+      accessibility:['All elements readable by VoiceOver(iOS)/TalkBack(Android)','Alt text applied to images','Color contrast ratio WCAG 4.5:1 or higher','Layout maintained under large/bold text (accessibility)','Logical focus order','Information perceivable in color-blind mode'],
+      compatibility:['App works on minimum supported iOS version','App works on minimum supported Android SDK','Layout correct on small screen (4.7 inch)','Layout optimized on tablet/iPad','Foldable phone screen transition handled','No UI breakage on system language change','Compatibility re-verified after latest OS update','Image sharpness across HDPI/XHDPI/XXHDPI densities'],
+      regression:['Core features that worked in previous version re-verified','User data migration from previous version handled correctly','Bug fix items confirmed as resolved','No side effects around fixed items','Existing settings not reset','App works correctly after update from previous version'],
+      localization:['No text truncation in supported languages','Date/time/currency format correct per region','RTL layout mirroring for Arabic etc.','No missing translation keys (no raw English shown)','No hardcoded strings','App Store screenshots/text localized'],
+      push:['Push received in foreground/background/terminated states','Tap on push navigates to correct screen via deep link','App behavior correct when notification permission denied','Scheduled notifications sent at exact time','No excessive personal data in notification content','Notification settings on/off reflected immediately','Badge count displayed and cleared correctly']
+    }
+  },
+  ja: {
+    subtitle: 'モバイルアプリ品質保証チェックリスト生成ツール',
+    configTitle: 'テスト設定', configSub: '項目を入力してチェックリストを生成してください',
+    labelAppName: 'アプリ名', labelVersion: 'バージョン', labelPlatform: 'プラットフォーム',
+    labelAppType: 'アプリ種別', labelDept: '部署', labelTester: 'テスト担当者',
+    labelCat: 'テストカテゴリ', labelNotes: '備考 / 追加スコープ (任意)',
+    phAppName: '例: MyApp, SuperShop', phDept: '例: QAチーム', phTester: '例: 田中太郎',
+    phNotes: '例: 決済フロー重点テスト...',
+    btnGenerate: 'チェックリスト生成', btnSave: '💾 一時保存', btnLoad: '📂 読み込み',
+    btnSelectAll: '全選択', btnDeselectAll: '全解除', btnAddCat: '+ カテゴリ追加',
+    btnLocale: '🌐 多言語追加', btnExpand: '全て折りたたむ', btnCollapse: '全て展開',
+    btnSaveOut: '💾 保存', btnReset: 'リセット', btnPrint: '🖨 印刷 / PDF',
+    statusNone: '— 未実施', statusPass: 'PASS', statusFail: 'FAIL', statusNa: 'N/A', statusNt: 'N/T',
+    priHigh: '高', priMed: '中', priLow: '低',
+    phRemark: '備考を入力...', phNewItem: '  + 項目を直接追加... (Enter)',
+    btnAddItem: '項目追加 +', btnDelSection: 'セクション削除',
+    confirmReset: 'すべての結果をリセットしますか？',
+    confirmLoad: '保存済みチェックリストを読み込みますか？\n保存時刻: {t}\n\n現在の作業内容は上書きされます。',
+    confirmDelSection: 'このセクションを削除しますか？\nカテゴリタグの選択も解除されます。',
+    msgNoData: '保存するチェックリストがありません。', msgSaved: '✓ 一時保存完了 — {t}',
+    msgAutoSaved: '⟳ 自動保存 — {t}', msgSaveErr: '保存失敗: {e}',
+    msgLoadOk: '✓ 読み込み完了 (保存: {t})', msgNoSave: '保存データがありません。',
+    msgLocaleAdded: '✓ 多言語項目を追加しました',
+    appTypeEC: 'Eコマース / ショッピング', appTypeFT: 'FinTech / 金融', appTypeSN: 'SNS / ソーシャル',
+    appTypeHL: 'ヘルス / フィットネス', appTypeMD: 'メディア / ストリーミング', appTypePR: '生産性 / 業務',
+    appTypeGM: 'ゲーム', appTypeGL: '一般アプリ',
+    tagFunctional: '⚙️ 機能テスト', tagUI: '🎨 UI/UX', tagPerf: '⚡ パフォーマンス',
+    tagNetwork: '🌐 ネットワーク', tagSecurity: '🔒 セキュリティ', tagA11y: '♿ アクセシビリティ',
+    tagCompat: '📱 互換性', tagRegress: '🔁 リグレッション', tagLocale: '🌍 ローカライズ', tagPush: '🔔 プッシュ通知',
+    catNames: {
+      functional:'機能テスト', ui:'UI/UXテスト', performance:'パフォーマンステスト',
+      network:'ネットワークテスト', security:'セキュリティテスト', accessibility:'アクセシビリティテスト',
+      compatibility:'互換性テスト', regression:'リグレッションテスト',
+      localization:'ローカライズテスト', push:'プッシュ通知テスト'
+    },
+    items: {
+      functional:['主要ユーザーフローが正常に動作することを確認','ログイン / ログアウト / 会員登録フローの検証','必須入力フィールドのバリデーション確認','データ保存後アプリ再起動時のデータ維持確認','戻るボタン / ナビゲーション動作の一貫性確認','タブ切替・画面遷移時の状態維持確認','検索機能 — キーワード・フィルター・ソート動作検証','エラーメッセージの適切性・ユーザビリティ確認','空状態(Empty State)UIの適切な表示確認','通知権限許可/拒否後のアプリ動作確認'],
+      ui:['スプラッシュスクリーン・ローディングアニメーションの自然な表示','フォントサイズ・色・余白がデザイン仕様と一致するか確認','ボタン・タッチ領域が最低44×44pt以上か確認','キーボード表示時に主要コンテンツが隠れないか確認','スクロール動作の滑らかさ・スクロール位置復元確認','ダーク/ライトモード切替時のUI崩れがないか確認','大きなテキストサイズ設定でのレイアウト確認','画像読み込み中のプレースホルダー表示確認','横/縦画面回転時のレイアウト対応確認','Notch/Dynamic Island/パンチホール領域への侵入がないか確認'],
+      performance:['コールドスタート時間3秒以内の確認','メイン画面表示後の初回コンテンツ表示時間測定','スクロール時60fps維持(フレームドロップなし)','30分使用後のメモリリーク確認','バッテリー消費の異常過多がないか確認','バックグラウンド切替後の状態復元確認','大量リスト(1000件以上)のレンダリング性能確認','画像キャッシュの正常動作確認','ANR/Crashなしで連続1時間使用可能か確認'],
+      network:['オフライン時の適切なエラーメッセージ表示','ネットワーク切替時(WiFi↔LTE)の自動復旧確認','APIタイムアウト処理・リトライロジック確認','低速ネットワーク(2G/3G)でのローディング表示','重複リクエスト防止(連続タップ処理)','大容量ファイルのアップロード/ダウンロード進捗表示','500/400エラー時のユーザーフレンドリーなエラー表示','バックグラウンドでのネットワークリクエストキャンセル処理'],
+      security:['パスワード・機密データがログに露出しないか確認','SSL Pinning / TLS 1.2+の適用確認','ローカルストレージの機密データ暗号化確認','セッション期限・自動ログアウト処理確認','スクリーンショット/録画ブロック対象画面の確認','ルート化/脱獄端末の検知・アクセス制限','ディープリンクのパラメータインジェクション防止','ネットワークキャプチャでのAPIトークン露出確認','バックグラウンド時の機密画面ブラー処理確認'],
+      accessibility:['VoiceOver(iOS)/TalkBack(Android)で全要素が読み上げられるか確認','画像への代替テキスト(Alt Text)適用確認','色コントラスト比WCAG 4.5:1以上の確認','大文字/太字テキスト時のレイアウト維持確認','フォーカス順序の論理的な流れの確認','色覚障害モードでの情報認識可能か確認'],
+      compatibility:['最小サポートiOSバージョンでの正常動作確認','最小サポートAndroid SDKバージョンでの正常動作確認','小画面(4.7インチ)でのレイアウト確認','タブレット/iPadでのレイアウト最適化確認','折り畳みスマホの画面切替対応確認','システム言語変更時のUI崩れがないか確認','最新OSアップデート後の互換性再確認','各解像度(HDPI/XHDPI/XXHDPI)での画像鮮明度確認'],
+      regression:['前バージョンで正常動作していた主要機能の再確認','前バージョンのユーザーデータ移行の正常処理確認','バグ修正項目が実際に修正されているか確認','修正項目周辺のサイドエフェクトがないか確認','既存設定値がリセットされずに維持されるか確認','前バージョンから新バージョンへのアップデート後の正常動作確認'],
+      localization:['対応言語のテキスト切れ(Truncation)がないか確認','日付/時刻/通貨形式が地域ごとに正しく表示されるか確認','アラビア語等のRTLレイアウトミラーリング確認','翻訳キーの누락がないか(英語テキスト露出確認)','ハードコードされた文字列がないか確認','App Storeスクリーンショット/テキストのローカライズ確認'],
+      push:['フォアグラウンド/バックグラウンド/終了状態でのプッシュ受信確認','プッシュタップ時の正しい画面へのディープリンク遷移確認','通知権限未許可時のアプリ動作確認','予約通知が正確な時刻に送信されるか確認','通知内容への個人情報過多露出がないか確認','通知設定のオン/オフが即時反映されるか確認','バッジカウントの正確な表示/クリア確認']
+    }
+  }
+};
+
+function t(key, vars) {
+  var val = (I18N[LANG] || I18N.ko)[key] || (I18N.ko[key] || key);
+  if (vars) Object.keys(vars).forEach(function(k) { val = val.replace('{'+k+'}', vars[k]); });
+  return val;
+}
+
+function applyLang() {
+  var L = I18N[LANG] || I18N.ko;
+
+  // Header
+  var sub = document.querySelector('.brand-sub-row p');
+  if (sub) sub.textContent = L.subtitle;
+
+  // Config card
+  var cfgTitle = document.querySelector('.config-header-title');
+  var cfgSub   = document.querySelector('.config-header-sub');
+  if (cfgTitle) cfgTitle.textContent = L.configTitle;
+  if (cfgSub)   cfgSub.textContent   = L.configSub;
+
+  // Labels — find by position in config-grid
+  var labels = document.querySelectorAll('.config-grid .field label');
+  var labelKeys = ['labelAppName','labelVersion','labelPlatform','labelAppType','labelDept','labelTester'];
+  labels.forEach(function(el, i) { if (labelKeys[i]) el.textContent = L[labelKeys[i]]; });
+
+  // Category label (full field)
+  var catLabel = document.querySelector('.field.full label');
+  if (catLabel) catLabel.textContent = L.labelCat;
+  var notesLabel = document.querySelectorAll('.field.full label')[1];
+  if (notesLabel) notesLabel.textContent = L.labelNotes;
+
+  // Placeholders
+  var fn = ['appName','department','tester','notes'];
+  var ph = ['phAppName','phDept','phTester','phNotes'];
+  fn.forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el) el.placeholder = L[ph[i]];
+  });
+
+  // App type options
+  var appTypeEl = document.getElementById('appType');
+  if (appTypeEl) {
+    var opts = appTypeEl.querySelectorAll('option');
+    var keys = ['appTypeEC','appTypeFT','appTypeSN','appTypeHL','appTypeMD','appTypePR','appTypeGM','appTypeGL'];
+    opts.forEach(function(o, i) { if (keys[i]) o.textContent = L[keys[i]]; });
+  }
+
+  // Buttons
+  var btnMap = {
+    btnGenerate: 'btnGenerate', btnSave: 'btnSave', btnLoad: 'btnLoad',
+    btnSaveOutput: 'btnSaveOut', btnReset: 'btnReset', btnPrint: 'btnPrint',
+    btnAddCat: 'btnAddCat'
+  };
+  Object.keys(btnMap).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = L[btnMap[id]];
+  });
+
+  // Select All button (tracks state via text)
+  var btnSA = document.getElementById('btnSelectAll');
+  if (btnSA) {
+    var allActive = Array.from(document.querySelectorAll('#categoryTags .tag')).every(function(t) { return t.classList.contains('active'); });
+    btnSA.textContent = allActive ? L.btnDeselectAll : L.btnSelectAll;
+  }
+
+  // Expand button
+  var btnExp = document.getElementById('btnExpand');
+  if (btnExp) {
+    var allCollapsed = Array.from(document.querySelectorAll('.section')).every(function(s) { return s.classList.contains('collapsed'); });
+    btnExp.textContent = allCollapsed ? L.btnCollapse : L.btnExpand;
+  }
+
+  // Category tags
+  var tagMap = {functional:'tagFunctional',ui:'tagUI',performance:'tagPerf',network:'tagNetwork',security:'tagSecurity',accessibility:'tagA11y',compatibility:'tagCompat',regression:'tagRegress',localization:'tagLocale',push:'tagPush'};
+  Object.keys(tagMap).forEach(function(cat) {
+    var tag = document.querySelector('#categoryTags .tag[data-cat="'+cat+'"]');
+    if (tag) tag.textContent = L[tagMap[cat]];
+  });
+
+  // Section names in checklist
+  Object.keys(L.catNames).forEach(function(cat) {
+    var nameEl = document.querySelector('#section_'+cat+' .section-name');
+    if (nameEl) nameEl.textContent = L.catNames[cat];
+  });
+
+  // Item texts in DOM
+  Object.keys(L.items).forEach(function(cat) {
+    var data = CHECKLIST_DATA[cat];
+    if (!data) return;
+    var origItems = L.items[cat];
+    data.items.forEach(function(item, i) {
+      if (item._custom) return; // skip user-added items
+      // Update CHECKLIST_DATA text for future generates
+      if (origItems[i]) item.text = origItems[i];
+      // Update live DOM
+      var txtEl = document.getElementById('txt_'+cat+'_'+i);
+      if (txtEl) txtEl.textContent = origItems[i];
+    });
+  });
+
+  // Live checklist: status options, priority options, placeholders
+  document.querySelectorAll('.status-select').forEach(function(sel) {
+    var val = sel.value;
+    sel.options[0].textContent = L.statusNone;
+    sel.value = val;
+  });
+  document.querySelectorAll('.item-pri-select, .add-item-pri').forEach(function(sel) {
+    var val = sel.value;
+    var opts = sel.querySelectorAll('option');
+    if (opts[0]) opts[0].textContent = '🔴 ' + L.priHigh;
+    if (opts[1]) opts[1].textContent = '🟡 ' + L.priMed;
+    if (opts[2]) opts[2].textContent = '⚪ ' + L.priLow;
+    sel.value = val;
+  });
+  document.querySelectorAll('.remark-input').forEach(function(el) { el.placeholder = L.phRemark; });
+  document.querySelectorAll('.add-item-input').forEach(function(el) { el.placeholder = L.phNewItem; });
+  document.querySelectorAll('.btn-add-item').forEach(function(el) { el.textContent = L.btnAddItem; });
+  document.querySelectorAll('.btn-section-del').forEach(function(el) { el.title = L.btnDelSection; });
+
+  // Priority badges
+  document.querySelectorAll('.item-priority').forEach(function(el) {
+    if (el.classList.contains('priority-high'))   el.textContent = L.priHigh;
+    if (el.classList.contains('priority-medium')) el.textContent = L.priMed;
+    if (el.classList.contains('priority-low'))    el.textContent = L.priLow;
+  });
+}
+
+function switchLang(lang) {
+  LANG = lang;
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  applyLang();
+}
+
 var customCats   = {};   // id -> {icon, name, items:[]}
 var STATUS_CLASSES = ['s-pass','s-fail','s-na','s-nt'];
 var SAVE_KEY = 'mqa_v4_save';
@@ -1082,9 +1459,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   document.getElementById('btnReset').addEventListener('click', resetChecklist);
   document.getElementById('btnPrint').addEventListener('click', printChecklist);
-  document.getElementById('btnClose').addEventListener('click', function() {
-    document.getElementById('output').classList.remove('visible');
-  });
 
   // Modal
   document.getElementById('btnModalClose').addEventListener('click', closeAddCatModal);
@@ -1096,6 +1470,56 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('newCatName').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') confirmAddCat();
   });
+
+  // ── Icon Picker init ──
+  var ICON_GROUPS = [
+    { label: '일반', icons: ['📋','📝','📌','📍','🗂','📁','📂','🗃','📊','📈','📉','🔖','🏷','📎','✂️','🖊','✏️','🔧'] },
+    { label: '테스트 / 개발', icons: ['🧪','🔬','🧬','🔭','⚗️','🛠','⚙️','🔩','🔌','💾','💿','📀','🖥','📱','⌨️','🖱','🖨'] },
+    { label: '보안 / 네트워크', icons: ['🔒','🔓','🛡','🔑','🗝','🌐','📡','🔐','🚦','⚠️','🚨','🔔','📶','🛰'] },
+    { label: '품질 / 결과', icons: ['✅','❌','⭕','❓','❗','💯','🏆','🥇','🎯','📐','📏','🔍','🔎','✔️','⚡','🚀','💡','🌟'] },
+    { label: '사람 / 팀', icons: ['👤','👥','🧑‍💻','👨‍🔬','👩‍🔬','🧑‍🎨','🤝','🙋','💬','📣','📢','🗣','👂','🧠','💪'] },
+  ];
+
+  var groups = document.getElementById('iconPickerGroups');
+  ICON_GROUPS.forEach(function(g) {
+    var lbl = document.createElement('div');
+    lbl.className = 'icon-group-label';
+    lbl.textContent = g.label;
+    groups.appendChild(lbl);
+    var grid = document.createElement('div');
+    grid.className = 'icon-grid';
+    g.icons.forEach(function(icon) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'icon-opt' + (icon === '📋' ? ' selected' : '');
+      btn.dataset.icon = icon;
+      btn.textContent = icon;
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        document.querySelectorAll('.icon-opt').forEach(function(b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        document.getElementById('newCatIcon').value = icon;
+        document.getElementById('iconPickerSelected').textContent = icon;
+        document.querySelector('.icon-picker-wrap').classList.remove('open');
+      });
+      grid.appendChild(btn);
+    });
+    groups.appendChild(grid);
+  });
+
+  // Toggle dropdown
+  document.getElementById('iconPickerTrigger').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.querySelector('.icon-picker-wrap').classList.toggle('open');
+  });
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    var wrap = document.querySelector('.icon-picker-wrap');
+    if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+  });
+
+  // Auto-restore
+  autoRestore();
 });
 
 /* ═══════════════════════════════════════
@@ -1120,8 +1544,20 @@ function getVal(id) {
    ADD CATEGORY MODAL
 ═══════════════════════════════════════ */
 function openAddCatModal() {
-  document.getElementById('newCatIcon').value = '';
+  // Reset fields
+  document.getElementById('newCatIcon').value = '📋';
+  document.getElementById('iconPickerSelected').textContent = '📋';
   document.getElementById('newCatName').value = '';
+
+  // Mark default selected
+  document.querySelectorAll('.icon-opt').forEach(function(b) {
+    b.classList.toggle('selected', b.dataset.icon === '📋');
+  });
+  // Close dropdown if open
+  document.getElementById('iconPickerWrap') &&
+    document.getElementById('iconPickerWrap').classList.remove('open');
+  document.querySelector('.icon-picker-wrap').classList.remove('open');
+
   document.getElementById('addCatModal').classList.add('open');
   setTimeout(function() { document.getElementById('newCatName').focus(); }, 100);
 }
@@ -1148,10 +1584,12 @@ function confirmAddCat() {
     e.stopPropagation();
     delete customCats[id];
     tag.remove();
+    scheduleAutoSave();
   });
   bindTagClick(tag);  // delegation handles clicks, this is now a no-op
   wrap.appendChild(tag);
   closeAddCatModal();
+  scheduleAutoSave();
 }
 
 /* ═══════════════════════════════════════
@@ -1169,13 +1607,19 @@ function generateChecklist() {
   document.getElementById('outputTitle').textContent = appName + ' v' + version + ' — ' + platform.toUpperCase();
 
   var container    = document.getElementById('checklistContainer');
-  var extras       = TYPE_EXTRAS[appType] || [];
+  var extrasSrc    = TYPE_EXTRAS[appType] || [];
+  var extrasI18n   = TYPE_EXTRAS_I18N[LANG] || {};
+  var extras       = extrasSrc.map(function(e) {
+    return { section: e.section, priority: e.priority, _key: e._key,
+             text: (e._key && extrasI18n[e._key]) ? extrasI18n[e._key] : e.text };
+  });
   var isFirstGen   = container.innerHTML.trim() === '';
 
   // Full reset only on first generation
   if (isFirstGen) {
     itemState    = {};
     itemCounters = {};
+    deletedKeys  = [];
     container.innerHTML = '';
   }
 
@@ -1235,17 +1679,18 @@ function generateChecklist() {
         '<div class="section-mini" id="mini_' + cat + '"></div>',
         '<div class="section-badge" id="cnt_' + cat + '">' + items.length + '개</div>',
         '<div class="chevron">▾</div>',
+        '<button class="btn-section-del" data-cat="' + cat + '" title="섹션 삭제">✕</button>',
       '</div>',
       '<div class="section-body" id="body_' + cat + '">',
         itemsHTML,
         '<div class="add-item-row" id="addrow_' + cat + '">',
-          '<input class="add-item-input" id="newitem_' + cat + '" placeholder="  + 항목 직접 추가... (Enter)" />',
+          '<input class="add-item-input" id="newitem_' + cat + '" placeholder="' + (I18N[LANG]||I18N.ko).phNewItem + '" />',
           '<select class="add-item-pri" id="newpri_' + cat + '">',
-            '<option value="high">🔴 높음</option>',
-            '<option value="medium" selected>🟡 중간</option>',
-            '<option value="low">⚪ 낮음</option>',
+            '<option value="high">🔴 ' + (I18N[LANG]||I18N.ko).priHigh + '</option>',
+            '<option value="medium" selected>🟡 ' + (I18N[LANG]||I18N.ko).priMed + '</option>',
+            '<option value="low">⚪ ' + (I18N[LANG]||I18N.ko).priLow + '</option>',
           '</select>',
-          '<button class="btn-add-item" data-cat="' + cat + '">항목 추가 +</button>',
+          '<button class="btn-add-item" data-cat="' + cat + '">' + (I18N[LANG]||I18N.ko).btnAddItem + '</button>',
         '</div>',
       '</div>'
     ].join('');
@@ -1300,9 +1745,11 @@ function generateChecklist() {
    BUILD ITEM HTML
 ═══════════════════════════════════════ */
 function buildItemHTML(cat, i, item) {
-  var pLabel   = { high:'높음', medium:'중간', low:'낮음' }[item.priority] || item.priority;
-  var platTag  = item.platform ? '<span class="item-platform">' + escHtml(item.platform) + '</span>' : '';
-  var key      = cat + '_' + i;
+  var L      = I18N[LANG] || I18N.ko;
+  var pMap   = { high: L.priHigh, medium: L.priMed, low: L.priLow };
+  var pLabel = pMap[item.priority] || item.priority;
+  var platTag = item.platform ? '<span class="item-platform">' + escHtml(item.platform) + '</span>' : '';
+  var key    = cat + '_' + i;
   return [
     '<div class="check-item pri-' + item.priority + '" id="item_' + key + '" data-cat="' + cat + '" data-idx="' + i + '">',
       '<div class="drag-handle" title="드래그하여 순서 변경">⠿</div>',
@@ -1324,7 +1771,7 @@ function buildItemHTML(cat, i, item) {
       '<button class="item-edit-btn" id="editbtn_' + key + '" data-cat="' + cat + '" data-idx="' + i + '" title="항목 수정">✎</button>',
       '<div class="item-status-wrap">',
         '<select class="status-select" id="sel_' + key + '" data-cat="' + cat + '" data-idx="' + i + '">',
-          '<option value="none">— 미진행</option>',
+          '<option value="none">' + L.statusNone + '</option>',
           '<option value="pass">PASS</option>',
           '<option value="fail">FAIL</option>',
           '<option value="na">N/A</option>',
@@ -1332,7 +1779,7 @@ function buildItemHTML(cat, i, item) {
         '</select>',
       '</div>',
       '<div class="item-remark-wrap">',
-        '<input type="text" class="remark-input" id="rmk_' + key + '" placeholder="비고 입력..." />',
+        '<input type="text" class="remark-input" id="rmk_' + key + '" placeholder="' + L.phRemark + '" />',
       '</div>',
       '<button class="item-del-btn" data-cat="' + cat + '" data-idx="' + i + '" title="항목 삭제">×</button>',
     '</div>'
@@ -1428,6 +1875,7 @@ document.addEventListener('mouseup', function(e) {
     moved.style.transition = 'background .35s';
     moved.style.background = '#e8f0fe';
     setTimeout(function() { moved.style.background = ''; moved.style.transition = ''; }, 400);
+    scheduleAutoSave();
   }
   dndCleanup();
 });
@@ -1457,6 +1905,13 @@ document.addEventListener('click', function(e) {
     var cat = e.target.dataset.cat;
     var idx = e.target.dataset.idx;
     deleteItem(cat, idx);
+    return;
+  }
+  // section delete button
+  if (e.target.classList.contains('btn-section-del')) {
+    e.stopPropagation();
+    var cat = e.target.dataset.cat;
+    deleteSection(cat);
     return;
   }
 });
@@ -1564,6 +2019,7 @@ function commitEdit(cat, idx) {
   txtEl.classList.remove('hidden');
   areaEl.classList.remove('visible');
   if (btnEl) btnEl.classList.remove('active');
+  scheduleAutoSave();
 }
 
 /* ═══════════════════════════════════════
@@ -1579,9 +2035,17 @@ function addItem(cat) {
   itemCounters[cat] = i + 1;
   itemState[cat + '_' + i] = 'none';
 
+  // Persist to data source so re-generation includes this item
+  var newItemObj = { text: text, priority: priEl.value };
+  if (CHECKLIST_DATA[cat]) {
+    CHECKLIST_DATA[cat].items.push(newItemObj);
+  } else if (customCats[cat]) {
+    customCats[cat].items.push(newItemObj);
+  }
+
   var addRow = document.getElementById('addrow_' + cat);
   var div    = document.createElement('div');
-  div.innerHTML = buildItemHTML(cat, i, { text: text, priority: priEl.value });
+  div.innerHTML = buildItemHTML(cat, i, newItemObj);
   addRow.parentNode.insertBefore(div.firstElementChild, addRow);
 
   var keys = Object.keys(itemState).filter(function(k) { return k.indexOf(cat + '_') === 0; });
@@ -1600,6 +2064,7 @@ function addItem(cat) {
 function deleteItem(cat, idx) {
   var key = cat + '_' + idx;
   delete itemState[key];
+  deletedKeys.push(key);   // remember deletion
   var el = document.getElementById('item_' + key);
   if (el) el.remove();
 
@@ -1609,6 +2074,35 @@ function deleteItem(cat, idx) {
 
   updateProgress();
   updateSectionMini(cat);
+  scheduleAutoSave();
+}
+
+/* ═══════════════════════════════════════
+   DELETE SECTION
+═══════════════════════════════════════ */
+function deleteSection(cat) {
+  if (!confirm('이 섹션을 삭제하시겠습니까?\n삭제 후 카테고리 태그 선택도 해제됩니다.')) return;
+
+  // Remove all itemState keys for this cat
+  Object.keys(itemState).forEach(function(k) {
+    if (k.indexOf(cat + '_') === 0) delete itemState[k];
+  });
+  delete itemCounters[cat];
+
+  // Remove section DOM
+  var sec = document.getElementById('section_' + cat);
+  if (sec) {
+    sec.style.transition = 'opacity .2s, transform .2s';
+    sec.style.opacity = '0';
+    sec.style.transform = 'translateX(8px)';
+    setTimeout(function() { sec.remove(); }, 200);
+  }
+
+  // Deactivate tag in category panel
+  var tag = document.querySelector('#categoryTags .tag[data-cat="' + cat + '"]');
+  if (tag) tag.classList.remove('active');
+
+  updateProgress();
 }
 
 /* ═══════════════════════════════════════
@@ -1709,6 +2203,60 @@ var storage = {
   }
 };
 
+/* ═══════════════════════════════════════
+   CUSTOM CATS — serialize / restore
+═══════════════════════════════════════ */
+function serializeCustomCats() {
+  // Save id, icon, name, items (text+priority) and active state
+  var wrap = document.getElementById('categoryTags');
+  return Object.keys(customCats).map(function(id) {
+    var tag    = wrap ? wrap.querySelector('.tag[data-cat="' + id + '"]') : null;
+    var active = tag ? tag.classList.contains('active') : false;
+    return {
+      id:     id,
+      icon:   customCats[id].icon,
+      name:   customCats[id].name,
+      active: active,
+      items:  (customCats[id].items || []).map(function(item) {
+        return { text: item.text, priority: item.priority || 'medium' };
+      })
+    };
+  });
+}
+
+function restoreCustomCats(savedCats) {
+  if (!savedCats || !savedCats.length) return;
+  var wrap = document.getElementById('categoryTags');
+
+  savedCats.forEach(function(c) {
+    // Skip if already exists in DOM (e.g. duplicate restore call)
+    if (customCats[c.id]) return;
+
+    // Rebuild customCats entry with items
+    customCats[c.id] = {
+      icon:  c.icon,
+      name:  c.name,
+      items: (c.items || []).map(function(item) {
+        return { text: item.text, priority: item.priority || 'medium' };
+      })
+    };
+
+    // Rebuild tag in DOM
+    var tag = document.createElement('span');
+    tag.className   = 'tag custom-tag' + (c.active ? ' active' : '');
+    tag.dataset.cat = c.id;
+    tag.innerHTML   = escHtml(c.icon) + ' ' + escHtml(c.name) + ' <span class="tag-del">✕</span>';
+
+    tag.querySelector('.tag-del').addEventListener('click', function(e) {
+      e.stopPropagation();
+      delete customCats[c.id];
+      tag.remove();
+      scheduleAutoSave();
+    });
+    wrap.appendChild(tag);
+  });
+}
+
 function collectRows() {
   var rows = [];
   document.querySelectorAll('.check-item:not(.add-item-row)').forEach(function(item) {
@@ -1758,7 +2306,9 @@ function saveChecklist() {
       notes:      getVal('notes'),
       activeCats: getActiveCats()
     },
-    rows:    rows,
+    customCats:  serializeCustomCats(),
+    rows:        rows,
+    deletedKeys: deletedKeys.slice(),
     savedAt: new Date().toISOString()
   };
   storage.set(SAVE_KEY, data).then(function() {
@@ -1767,6 +2317,97 @@ function saveChecklist() {
   }).catch(function(e) {
     showSaveStatus('저장 실패: ' + (e.message || e), 'err');
   });
+}
+
+/* ═══════════════════════════════════════
+   RESTORE ROWS — shared by loadChecklist + doAutoRestore
+   Handles: custom items, priority, text, status, remark, DOM order
+═══════════════════════════════════════ */
+function applyRestoredRows(rows, savedDeletedKeys) {
+  if (!rows || !rows.length) return;
+
+  // Pass 1: insert custom items that don't exist yet
+  rows.forEach(function(r) {
+    if (!r.isCustom) return;
+    var addRow = document.getElementById('addrow_' + r.cat);
+    if (!addRow) return;
+    if (document.getElementById('item_' + r.cat + '_' + r.idx)) return;
+    var i = parseInt(r.idx);
+    itemState[r.cat + '_' + i] = 'none';
+    if (itemCounters[r.cat] === undefined || itemCounters[r.cat] <= i) itemCounters[r.cat] = i + 1;
+    var div = document.createElement('div');
+    div.innerHTML = buildItemHTML(r.cat, i, { text: r.text, priority: r.priority || 'medium' });
+    addRow.parentNode.insertBefore(div.firstElementChild, addRow);
+  });
+
+  // Pass 2: restore text, priority, status, remark
+  rows.forEach(function(r) {
+    var key   = r.cat + '_' + r.idx;
+    var rowEl = document.getElementById('item_' + key);
+    var txtEl = document.getElementById('txt_' + key);
+    var selEl = document.getElementById('sel_' + key);
+    var rmkEl = document.getElementById('rmk_' + key);
+    if (txtEl && r.text) txtEl.textContent = r.text;
+    if (rmkEl && r.remark) rmkEl.value = r.remark;
+    // Restore priority class + badge
+    if (rowEl && r.priority) {
+      var L = I18N[LANG] || I18N.ko;
+      var pMap = { high: L.priHigh, medium: L.priMed, low: L.priLow };
+      rowEl.classList.remove('pri-high', 'pri-medium', 'pri-low');
+      rowEl.classList.add('pri-' + r.priority);
+      var badge = rowEl.querySelector('.item-priority');
+      if (badge) {
+        badge.className = 'item-priority priority-' + r.priority;
+        badge.textContent = pMap[r.priority] || r.priority;
+      }
+    }
+    if (selEl && r.status && r.status !== 'none') {
+      selEl.value = r.status;
+      setStatus(r.cat, parseInt(r.idx), r.status);
+    }
+  });
+
+  // Pass 3: reorder DOM to match saved row sequence (restores drag-and-drop order)
+  var catOrder = {};
+  rows.forEach(function(r) {
+    if (!catOrder[r.cat]) catOrder[r.cat] = [];
+    catOrder[r.cat].push(r.cat + '_' + r.idx);
+  });
+  Object.keys(catOrder).forEach(function(cat) {
+    var body   = document.getElementById('body_' + cat);
+    var addRow = document.getElementById('addrow_' + cat);
+    if (!body || !addRow) return;
+    catOrder[cat].forEach(function(key) {
+      var el = document.getElementById('item_' + key);
+      if (el) body.insertBefore(el, addRow);
+    });
+  });
+
+  // Pass 4: re-apply deletions (items deleted before save)
+  if (savedDeletedKeys && savedDeletedKeys.length) {
+    deletedKeys = savedDeletedKeys.slice();
+    savedDeletedKeys.forEach(function(key) {
+      var parts = key.split('_');
+      var idx   = parts[parts.length - 1];
+      var cat   = parts.slice(0, -1).join('_');
+      delete itemState[key];
+      var el = document.getElementById('item_' + key);
+      if (el) el.remove();
+      // Update CHECKLIST_DATA so re-generate won't bring them back
+      var catData = CHECKLIST_DATA[cat] || customCats[cat];
+      if (catData) catData.items = catData.items.filter(function(_, i) { return String(i) !== idx; });
+    });
+  }
+
+  // Update counts + mini stats
+  var cats = Array.from(new Set(rows.map(function(r) { return r.cat; })));
+  cats.forEach(function(cat) {
+    var keys  = Object.keys(itemState).filter(function(k) { return k.indexOf(cat + '_') === 0; });
+    var cntEl = document.getElementById('cnt_' + cat);
+    if (cntEl) cntEl.textContent = keys.length + '개';
+    updateSectionMini(cat);
+  });
+  updateProgress();
 }
 
 function loadChecklist() {
@@ -1791,6 +2432,9 @@ function loadChecklist() {
     setField('tester',     cfg.tester);
     setField('notes',      cfg.notes);
 
+    // Restore custom categories first (must exist before activeCats + generateChecklist)
+    restoreCustomCats(data.customCats);
+
     if (cfg.activeCats && cfg.activeCats.length) {
       document.querySelectorAll('#categoryTags .tag').forEach(function(t) {
         t.classList.toggle('active', cfg.activeCats.indexOf(t.dataset.cat) !== -1);
@@ -1800,47 +2444,7 @@ function loadChecklist() {
     generateChecklist();
 
     setTimeout(function() {
-      if (data.rows && data.rows.length) {
-        // First pass: restore custom-added items that don't exist in DOM yet
-        data.rows.forEach(function(r) {
-          if (!r.isCustom) return;
-          var addRow = document.getElementById('addrow_' + r.cat);
-          if (!addRow) return;
-          // Only insert if not already in DOM
-          if (document.getElementById('item_' + r.cat + '_' + r.idx)) return;
-          var i = parseInt(r.idx);
-          itemState[r.cat + '_' + i] = 'none';
-          if (itemCounters[r.cat] === undefined || itemCounters[r.cat] <= i) {
-            itemCounters[r.cat] = i + 1;
-          }
-          var div = document.createElement('div');
-          div.innerHTML = buildItemHTML(r.cat, i, { text: r.text, priority: r.priority || 'medium' });
-          addRow.parentNode.insertBefore(div.firstElementChild, addRow);
-        });
-
-        // Second pass: restore text edits, status, remark for all rows
-        data.rows.forEach(function(r) {
-          var key   = r.cat + '_' + r.idx;
-          var txtEl = document.getElementById('txt_' + key);
-          var selEl = document.getElementById('sel_' + key);
-          var rmkEl = document.getElementById('rmk_' + key);
-          if (txtEl && r.text)   txtEl.textContent = r.text;
-          if (rmkEl && r.remark) rmkEl.value = r.remark;
-          if (selEl && r.status && r.status !== 'none') {
-            selEl.value = r.status;
-            setStatus(r.cat, parseInt(r.idx), r.status);
-          }
-        });
-
-        // Update section counts
-        data.rows.forEach(function(r) {
-          var keys  = Object.keys(itemState).filter(function(k) { return k.indexOf(r.cat + '_') === 0; });
-          var cntEl = document.getElementById('cnt_' + r.cat);
-          if (cntEl) cntEl.textContent = keys.length + '개';
-          updateSectionMini(r.cat);
-        });
-      }
-      updateProgress();
+      applyRestoredRows(data.rows, data.deletedKeys);
       var btnExp = document.getElementById('btnExpand');
       if (btnExp) btnExp.textContent = '전체 접기';
       showSaveStatus('✓ 불러오기 완료 (저장: ' + savedTime + ')', 'ok');
@@ -1849,6 +2453,95 @@ function loadChecklist() {
   }).catch(function() {
     showSaveStatus('저장된 데이터가 없습니다.', 'err');
   });
+}
+
+/* ═══════════════════════════════════════
+   AUTO-RESTORE on page load
+═══════════════════════════════════════ */
+function autoRestore() {
+  storage.get(SAVE_KEY).then(function(result) {
+    var data;
+    try { data = typeof result.value === 'string' ? JSON.parse(result.value) : result.value; }
+    catch(e) { return; }
+    if (!data || !data.savedAt) return;
+
+    // Show restore banner
+    var savedTime = new Date(data.savedAt).toLocaleString('ko-KR');
+    var banner = document.createElement('div');
+    banner.id = 'restoreBanner';
+    banner.style.cssText = [
+      'position:fixed;bottom:24px;left:50%;transform:translateX(-50%)',
+      'background:#1e293b;color:#f1f5f9;border-radius:12px',
+      'padding:12px 20px;display:flex;align-items:center;gap:12px',
+      'font-size:.82rem;z-index:9000;box-shadow:0 8px 24px rgba(0,0,0,.25)',
+      'animation:slideUp .3s cubic-bezier(.16,1,.3,1)',
+      'max-width:90vw;white-space:nowrap'
+    ].join(';');
+
+    banner.innerHTML =
+      '<span>💾 저장된 작업이 있습니다 <span style="color:#94a3b8;font-size:.75rem;">(' + savedTime + ')</span></span>' +
+      '<button onclick="doAutoRestore()" style="background:#2563eb;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:.78rem;font-weight:600;cursor:pointer;">불러오기</button>' +
+      '<button onclick="document.getElementById(\'restoreBanner\').remove()" style="background:none;border:none;color:#64748b;font-size:1rem;cursor:pointer;padding:0 2px;">✕</button>';
+
+    // Add animation keyframe once
+    if (!document.getElementById('restoreStyle')) {
+      var st = document.createElement('style');
+      st.id = 'restoreStyle';
+      st.textContent = '@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
+      document.head.appendChild(st);
+    }
+
+    document.body.appendChild(banner);
+
+    // Auto-dismiss after 8s
+    setTimeout(function() {
+      var b = document.getElementById('restoreBanner');
+      if (b) { b.style.opacity='0'; b.style.transition='opacity .3s'; setTimeout(function(){if(b.parentNode)b.remove();},300); }
+    }, 8000);
+
+  }).catch(function() { /* no saved data */ });
+}
+
+function doAutoRestore() {
+  var banner = document.getElementById('restoreBanner');
+  if (banner) banner.remove();
+
+  storage.get(SAVE_KEY).then(function(result) {
+    var data;
+    try { data = typeof result.value === 'string' ? JSON.parse(result.value) : result.value; }
+    catch(e) { showSaveStatus('데이터 파싱 실패', 'err'); return; }
+
+    var savedTime = new Date(data.savedAt).toLocaleString('ko-KR');
+    var cfg = data.config || {};
+    var setField = function(id, val) {
+      var el = document.getElementById(id);
+      if (el && val !== undefined && val !== null) el.value = val;
+    };
+    setField('appName',    cfg.appName);
+    setField('version',    cfg.version);
+    setField('platform',   cfg.platform);
+    setField('appType',    cfg.appType);
+    setField('department', cfg.department);
+    setField('tester',     cfg.tester);
+    setField('notes',      cfg.notes);
+
+    // Restore custom categories first (must exist before activeCats + generateChecklist)
+    restoreCustomCats(data.customCats);
+
+    if (cfg.activeCats && cfg.activeCats.length) {
+      document.querySelectorAll('#categoryTags .tag').forEach(function(t) {
+        t.classList.toggle('active', cfg.activeCats.indexOf(t.dataset.cat) !== -1);
+      });
+    }
+
+    generateChecklist();
+
+    setTimeout(function() {
+      applyRestoredRows(data.rows, data.deletedKeys);
+      showSaveStatus('✓ 자동 복원 완료 (저장: ' + savedTime + ')', 'ok');
+    }, 400);
+
+  }).catch(function() { showSaveStatus('저장된 데이터가 없습니다.', 'err'); });
 }
 
 function showSaveStatus(msg, type) {
@@ -1864,9 +2557,61 @@ function showSaveStatus(msg, type) {
 }
 
 /* ═══════════════════════════════════════
-   PRINT
+   AUTO-SAVE
 ═══════════════════════════════════════ */
-function printChecklist() {
+var _autoSaveTimer = null;
+var _autoSaveEl = null;
+
+function scheduleAutoSave() {
+  if (Object.keys(itemState).length === 0) return;
+  clearTimeout(_autoSaveTimer);
+  _autoSaveTimer = setTimeout(function() {
+    var rows = collectRows();
+    var data = {
+      config: {
+        appName:    getVal('appName'),
+        version:    getVal('version'),
+        platform:   getVal('platform'),
+        appType:    getVal('appType'),
+        department: getVal('department'),
+        tester:     getVal('tester'),
+        notes:      getVal('notes'),
+        activeCats: getActiveCats()
+      },
+      customCats:  serializeCustomCats(),
+      rows:        rows,
+      deletedKeys: deletedKeys.slice(),
+      savedAt: new Date().toISOString()
+    };
+    storage.set(SAVE_KEY, data).then(function() {
+      var t = new Date().toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+      showSaveStatus('⟳ 자동저장 — ' + t, 'ok');
+    }).catch(function() {});
+  }, 2000); // debounce 2s
+}
+
+// Hook auto-save onto status changes and remark inputs
+document.addEventListener('change', function(e) {
+  if (e.target.classList.contains('status-select') || e.target.classList.contains('remark-input')) {
+    scheduleAutoSave();
+  }
+});
+document.addEventListener('input', function(e) {
+  if (e.target.classList.contains('remark-input') || e.target.classList.contains('item-text-input')) {
+    scheduleAutoSave();
+  }
+});
+
+/* ═══════════════════════════════════════
+   MULTILANG — localization auto-load
+═══════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   EMAIL EXPORT
+═══════════════════════════════════════ */
+
+function buildReportHTML() {
+  if (Object.keys(itemState).length === 0) return null;
+
   var appTitle   = document.getElementById('outputTitle').textContent || 'QA Checklist';
   var department = getVal('department');
   var tester     = getVal('tester');
@@ -1982,6 +2727,13 @@ function printChecklist() {
     + sectionsHTML
     + '<scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},500);};<'+'/scr'+'ipt></body></html>';
 
+  return printDoc;
+}
+
+function printChecklist() {
+  var printDoc = buildReportHTML();
+  if (!printDoc) { showSaveStatus('출력할 체크리스트가 없습니다.', 'err'); return; }
+
   var win = window.open('', '_blank');
   if (win) {
     win.document.open();
@@ -1996,7 +2748,9 @@ function printChecklist() {
     a.click();
     setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
   }
+
 }
+
 
 
 </script>
